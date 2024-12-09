@@ -30,7 +30,7 @@ public class ScreenmatchApplication implements CommandLineRunner {
 
 		System.out.println(endereco);
 		ConsumoAPI api = new ConsumoAPI();
-		String json = api.retornaFilme(endereco);
+		var json = api.retornaFilme(endereco);
 		System.out.println(json);
 
 		ConverteDados dado = new ConverteDados();

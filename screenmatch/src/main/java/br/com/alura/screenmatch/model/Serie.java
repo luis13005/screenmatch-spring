@@ -2,18 +2,39 @@ package br.com.alura.screenmatch.model;
 
 import br.com.alura.screenmatch.service.ConsultaChatGPT;
 import com.fasterxml.jackson.annotation.JsonAlias;
+import jakarta.persistence.*;
 
+import java.util.List;
 import java.util.OptionalDouble;
 
+@Entity
+@Table(name = "Serie")
 public class Serie {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long serieId;
+
+    @Column(unique = true)
     private String titulo;
+
+    @Enumerated(EnumType.STRING)
     private Categoria genero;
+
     private String atores;
+
     private String poster;
+
     private String sinopse;
+
     private Integer totalTemporadas;
+
     private Double avaliacao;
+
+    @Transient
+    private List<Episodio> episodios;
+
+    public Serie(){}
 
     public Serie(DadosSerie dadosSerie){
         this.titulo = dadosSerie.titulo();

@@ -5,9 +5,9 @@ import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
 
 public class ConsultaChatGPT {
-    private static String API_KEY = "Coloque sua API KEY AQUI";
+    private static String API_KEY = System.getenv("API_CHATGPT");
     public static String Consultar(String txt){
-        System.out.println("API: "+API_KEY);
+
         OpenAiService chat = new OpenAiService(API_KEY);
 
         CompletionRequest request = CompletionRequest.builder()

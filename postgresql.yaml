@@ -1,0 +1,8 @@
+#version: '17.2'
+#
+#services:
+#  db:
+#    image: postgresImage17.2
+#    restart: always
+#    ports:
+#      - 5432:5432

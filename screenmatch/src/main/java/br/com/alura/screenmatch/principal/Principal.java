@@ -39,6 +39,9 @@ public class Principal {
                     3 - Mostrar Pesquisa
                     4 - Buscar Série por Titulo
                     5 - Buscar Série por Ator
+                    6 - Buscar top 5
+                    7 - Buscar por Categoria
+                    8 - Temporadas menores ou igual á
                     
                     0 - sair
                     """);
@@ -64,12 +67,39 @@ public class Principal {
                     buscarSeriePorAtor();
                     break;
 
+                case 6:
+                    buscarTop5();
+                    break;
+
+                case 7:
+                    buscarCategoria();
+                    break;
+
+                case 8:
+                    buscarTemporadasMenor();
+                    break;
+
                 case 0:
                     System.out.println("Saindo...");
                     break;
                 default:
                     System.out.println("Opção inválida");
             }
+        }
+    }
+
+    private void buscarTemporadasMenor() {
+        System.out.println("Digite o maximo de temporadas: ");
+        var total = leitura.nextInt();
+
+        System.out.println("Avaliação maior que: ");
+        var avaliacaoTotal = leitura.nextDouble();
+
+        Optional<Serie> totalTemporada = serieRepository.findByTotalTemporadasLessThanEqualAndAvaliacaoGreaterThanEqual(total,avaliacaoTotal);
+
+        if (totalTemporada.isPresent()){
+            totalTemporada.stream()
+                    .forEach(s -> System.out.println("Temporadas: "+s.getTotalTemporadas()+" Avaliação: "+s.getAvaliacao()+" Série: "+s.getTitulo()));
         }
     }
 
@@ -80,7 +110,7 @@ public class Principal {
             System.out.println(serie.toString());
         }
 
-        private DadosSerie buscarDados() {
+    private DadosSerie buscarDados() {
             System.out.println("\nDigite a Série desejada: ");
             var nomeSerie = leitura.nextLine();
             String url = ENDERECO+URLEncoder.encode(nomeSerie)+API_KEY;
@@ -97,7 +127,7 @@ public class Principal {
             return dadosSerie;
         }
 
-        private void buscarEpisodio(){
+    private void buscarEpisodio(){
             seriesBuscadas();
 
             System.out.println("Digite o nome da série: ");
@@ -134,7 +164,7 @@ public class Principal {
             }
         }
 
-        private void seriesBuscadas(){
+    private void seriesBuscadas(){
             series = serieRepository.findAll();
 
             series.stream().sorted(Comparator.comparing(Serie::getGenero))
@@ -161,12 +191,31 @@ public class Principal {
         var avaliacaoSerie = leitura.nextDouble();
 
         Optional<Serie> serieBuscada = serieRepository
-                .findSerieByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThan(atorNome,avaliacaoSerie);
+                .findSerieByAtoresContainingIgnoreCaseAndAvaliacaoGreaterThanEqual(atorNome,avaliacaoSerie);
 
         if (serieBuscada.isPresent()){
             System.out.println("O ator "+atorNome+" Participou das Séries: ");
             serieBuscada.stream().forEach(s ->
                             System.out.println( s.getTitulo()+ " Avaliação: "+s.getAvaliacao()));
+        }
+    }
+    private void buscarTop5() {
+        Optional<Serie> serieTop5 = serieRepository.findTop5ByOrderByAvaliacaoDesc();
+
+        serieTop5.stream()
+                .forEach(s -> System.out.println(s.getTitulo()+ " Avaliação: "+s.getAvaliacao()));
+    }
+
+    private void buscarCategoria() {
+        System.out.println("Digite o Genero: ");
+        var generoNome = leitura.nextLine();
+        Categoria categoria = Categoria.fromPortugues(generoNome);
+
+        Optional<Serie> serieOptional = serieRepository.findByGenero(categoria);
+
+        if (serieOptional.isPresent()){
+            serieOptional.stream()
+                    .forEach(s -> System.out.println(s.getTitulo()+ " Genero: "+s.getGenero()));
         }
     }
 }

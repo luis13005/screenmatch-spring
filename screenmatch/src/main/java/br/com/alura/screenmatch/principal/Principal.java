@@ -218,4 +218,13 @@ public class Principal {
                     .forEach(s -> System.out.println(s.getTitulo()+ " Genero: "+s.getGenero()));
         }
     }
+
+    private void consultaJPQL(){
+        System.out.println("Digite até quantas temporadas deseja: ");
+        var temporadas = leitura.nextInt();
+        System.out.println("Digite a avaliação minima: ");
+        var avaliacao = leitura.nextDouble();
+       List<Serie> serieList1 = serieRepository.findSerieTemporadaAvalicao(temporadas,avaliacao);
+        serieList1.stream().forEach(System.out::println);
+    }
 }

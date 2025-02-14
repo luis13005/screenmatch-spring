@@ -14,23 +14,15 @@ public class Serie {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long serieId;
-
     @Column(unique = true)
     private String titulo;
-
     @Enumerated(EnumType.STRING)
     private Categoria genero;
-
     private String atores;
-
     private String poster;
-
     private String sinopse;
-
     private Integer totalTemporadas;
-
     private Double avaliacao;
-
     @OneToMany(mappedBy = "serie",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     private List<Episodio> episodios;
 

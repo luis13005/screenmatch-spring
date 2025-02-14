@@ -24,6 +24,7 @@ public class Principal {
     private List<DadosSerie> serieList = new ArrayList<>();
     private SerieRepository serieRepository;
     private List<Serie> series = new ArrayList<>();
+    private Optional<Serie> serieBuscada;
 
     public Principal(SerieRepository serieRepository) {
         this.serieRepository = serieRepository;
@@ -34,14 +35,16 @@ public class Principal {
         while (opcao != 0) {
             System.out.println("""
                     
-                    1 - Buscar Série
-                    2 - Buscar Episódio
-                    3 - Mostrar Pesquisa
-                    4 - Buscar Série por Titulo
-                    5 - Buscar Série por Ator
-                    6 - Buscar top 5
-                    7 - Buscar por Categoria
-                    8 - Temporadas menores ou igual á
+                    1  - Buscar Série
+                    2  - Buscar Episódio
+                    3  - Mostrar Pesquisa
+                    4  - Buscar Série por Titulo
+                    5  - Buscar Série por Ator
+                    6  - Buscar top 5
+                    7  - Buscar por Categoria
+                    8  - Temporadas menores ou igual á
+                    9  - Consulta por trecho de Episodio
+                    10 - Top 5 Episodio da Serie
                     
                     0 - sair
                     """);
@@ -58,27 +61,27 @@ public class Principal {
                 case 3:
                     seriesBuscadas();
                     break;
-
                     case 4:
                 buscarSeriePorTitulo();
                     break;
-
                 case 5:
                     buscarSeriePorAtor();
                     break;
-
                 case 6:
                     buscarTop5();
                     break;
-
                 case 7:
                     buscarCategoria();
                     break;
-
                 case 8:
                     buscarTemporadasMenor();
                     break;
-
+                case 9:
+                    buscaEpisodioTrecho();
+                    break;
+                case 10:
+                    top5EpisodiosSerie();
+                    break;
                 case 0:
                     System.out.println("Saindo...");
                     break;
@@ -86,6 +89,25 @@ public class Principal {
                     System.out.println("Opção inválida");
             }
         }
+    }
+
+    private void top5EpisodiosSerie() {
+        buscarSeriePorTitulo();
+        if(serieBuscada.isPresent()){
+            Serie serie = serieBuscada.get();
+            List<Episodio> episodioList = serieRepository.top5EpisodiosSerie(serie);
+
+            episodioList.stream().forEach(System.out::println);
+        }
+    }
+
+    private void buscaEpisodioTrecho() {
+        System.out.println("Digite o trecho do episódio: ");
+        var trechoEpisodio = leitura.nextLine();
+
+        List<Episodio> EpisodioList = serieRepository.consultaEpisodioTrecho(trechoEpisodio);
+
+        EpisodioList.stream().forEach(System.out::println);
     }
 
     private void buscarTemporadasMenor() {
@@ -174,7 +196,7 @@ public class Principal {
     private void buscarSeriePorTitulo() {
         System.out.println("\nDigite a Série desejada: ");
         var nomeSerie = leitura.nextLine();
-        Optional<Serie> serieBuscada = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
+        serieBuscada = serieRepository.findByTituloContainingIgnoreCase(nomeSerie);
 
         if (serieBuscada.isPresent()){
             System.out.println("Dados da Série: "+serieBuscada.get());

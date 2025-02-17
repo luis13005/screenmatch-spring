@@ -6,6 +6,7 @@ import br.com.alura.screenmatch.model.Serie;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface SerieRepository extends JpaRepository<Serie, Long> {
     List<Episodio> consultaEpisodioTrecho(String trechoEp);
     @Query("SELECT e FROM Serie s JOIN episodios e where s = :serie ORDER BY e.avaliacao DESC LIMIT 5")
     List<Episodio> top5EpisodiosSerie(Serie serie);
+    @Query("SELECT e from Serie s INNER JOIN episodios e where s = :serie AND YEAR(e.dataLancamento) >= :ano ORDER BY e.dataLancamento")
+    List<Episodio> buscaEpisodiosApartirDeSerieData(Serie serie, int ano);
 }

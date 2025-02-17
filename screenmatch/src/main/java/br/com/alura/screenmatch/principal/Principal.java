@@ -45,6 +45,8 @@ public class Principal {
                     8  - Temporadas menores ou igual á
                     9  - Consulta por trecho de Episodio
                     10 - Top 5 Episodio da Serie
+                    11 - Busca Serie por Temporadas e Avaliação
+                    12 - Busca Episodios apartir de Serie e Data
                     
                     0 - sair
                     """);
@@ -81,6 +83,12 @@ public class Principal {
                     break;
                 case 10:
                     top5EpisodiosSerie();
+                    break;
+                case 11:
+                    buscaSeriePorTemporadaEpisodio();
+                    break;
+                case 12:
+                    buscaEpisodiosApartirDeSerieEAno();
                     break;
                 case 0:
                     System.out.println("Saindo...");
@@ -221,6 +229,7 @@ public class Principal {
                             System.out.println( s.getTitulo()+ " Avaliação: "+s.getAvaliacao()));
         }
     }
+
     private void buscarTop5() {
         Optional<Serie> serieTop5 = serieRepository.findTop5ByOrderByAvaliacaoDesc();
 
@@ -241,12 +250,24 @@ public class Principal {
         }
     }
 
-    private void consultaJPQL(){
+    private void buscaSeriePorTemporadaEpisodio(){
         System.out.println("Digite até quantas temporadas deseja: ");
         var temporadas = leitura.nextInt();
         System.out.println("Digite a avaliação minima: ");
         var avaliacao = leitura.nextDouble();
        List<Serie> serieList1 = serieRepository.findSerieTemporadaAvalicao(temporadas,avaliacao);
         serieList1.stream().forEach(System.out::println);
+    }
+
+    private void buscaEpisodiosApartirDeSerieEAno() {
+        buscarSeriePorTitulo();
+        if (serieBuscada.isPresent()){
+            Serie serie = serieBuscada.get();
+            System.out.println("Digite o ano: ");
+            int ano = leitura.nextInt();
+           List<Episodio> episodioList = serieRepository.buscaEpisodiosApartirDeSerieData(serie,ano);
+           episodioList.stream().forEach(System.out::println);
+        }
+
     }
 }

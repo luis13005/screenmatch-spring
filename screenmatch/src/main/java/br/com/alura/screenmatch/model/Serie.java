@@ -38,6 +38,14 @@ public class Serie {
         this.avaliacao = OptionalDouble.of(Double.valueOf(dadosSerie.avaliacao())).orElse(0);
     }
 
+    public Long getSerieId() {
+        return serieId;
+    }
+
+    public void setSerieId(Long serieId) {
+        this.serieId = serieId;
+    }
+
     public String getTitulo() {
         return titulo;
     }
@@ -98,6 +106,10 @@ public class Serie {
         episodios.forEach(e -> e.setSerie(this));
 
         this.episodios = episodios;
+    }
+
+    public List<Episodio> getEpisodios() {
+        return episodios;
     }
 
     @Override

@@ -13,7 +13,7 @@ public class Serie {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long serieId;
+    private Long id;
     @Column(unique = true)
     private String titulo;
     @Enumerated(EnumType.STRING)
@@ -39,11 +39,11 @@ public class Serie {
     }
 
     public Long getSerieId() {
-        return serieId;
+        return id;
     }
 
     public void setSerieId(Long serieId) {
-        this.serieId = serieId;
+        this.id = serieId;
     }
 
     public String getTitulo() {

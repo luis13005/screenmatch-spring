@@ -231,7 +231,7 @@ public class Principal {
     }
 
     private void buscarTop5() {
-        Optional<Serie> serieTop5 = serieRepository.findTop5ByOrderByAvaliacaoDesc();
+        List<Serie> serieTop5 = serieRepository.findTop5ByOrderByAvaliacaoDesc();
 
         serieTop5.stream()
                 .forEach(s -> System.out.println(s.getTitulo()+ " Avaliação: "+s.getAvaliacao()));
@@ -242,11 +242,10 @@ public class Principal {
         var generoNome = leitura.nextLine();
         Categoria categoria = Categoria.fromPortugues(generoNome);
 
-        Optional<Serie> serieOptional = serieRepository.findByGenero(categoria);
-
-        if (serieOptional.isPresent()){
-            serieOptional.stream()
-                    .forEach(s -> System.out.println(s.getTitulo()+ " Genero: "+s.getGenero()));
+        Optional<Serie> optionalSerie = serieRepository.findByGenero(categoria);
+        if (optionalSerie.isPresent()) {
+            optionalSerie.stream()
+                    .forEach(s -> System.out.println(s.getTitulo() + " Genero: " + s.getGenero()));
         }
     }
 
